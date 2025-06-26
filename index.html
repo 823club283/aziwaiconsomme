@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>味歪こんそめ公式ホームページ</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe0b2;
+            color: #ff6f00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff3e0;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in;
+        }
+        h1 {
+            font-size: 3em;
+            text-shadow: 2px 2px #ffcc80;
+            margin-bottom: 20px;
+        }
+        .button {
+            background-color: #ff6f00;
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .button:hover {
+            transform: scale(1.1);
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #d84315;
+        }
+        #countdown {
+            font-size: 2.5em;
+            color: #b71c1c;
+            margin-top: 20px;
+        }
+        #result-image {
+            margin-top: 20px;
+            max-width: 300px; /* 通常時の画像サイズ */
+            height: auto;
+            display: none; /* 初期は非表示 */
+            animation: imagePop 0.5s ease-in;
+        }
+        .explosion {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #ff0000, #000000);
+            z-index: 1000;
+            animation: explode 1s forwards;
+        }
+        .zoom-image {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 画面全体にフィット */
+            z-index: 1100;
+            animation: zoomIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes explode {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(2); }
+        }
+        @keyframes imagePop {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(1); opacity: 0; }
+            to { transform: scale(1.2); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>味歪こんそめ公式サイト</h1>
+        <button class="button" onclick="pressButton()">絶対に押すな！</button>
+        <div id="result"></div>
+        <div id="countdown"></div>
+        <img id="result-image" src="" alt="結果画像">
+    </div>
+    <div class="explosion" id="explosion"></div>
+    <img class="zoom-image" id="zoom-image" src="jakome.png" alt="ドアップじゃこめ">
+
+    <script>
+        function pressButton() {
+            const resultDiv = document.getElementById('result');
+            const countdownDiv = document.getElementById('countdown');
+            const explosionDiv = document.getElementById('explosion');
+            const resultImage = document.getElementById('result-image');
+            const zoomImage = document.getElementById('zoom-image');
+
+            // 初期化
+            resultDiv.textContent = '';
+            countdownDiv.textContent = '';
+            resultImage.style.display = 'none';
+            zoomImage.style.display = 'none';
+
+            // 10分の1の確率で特別なメッセージ
+            if (Math.random() < 0.1) {
+                resultDiv.textContent = '衝撃にそなえろ！！！！';
+                resultImage.src = 'shock.png'; // 衝撃用の画像
+                resultImage.style.display = 'block'; // 画像表示
+                let timeLeft = 10;
+                countdownDiv.textContent = timeLeft;
+
+                const countdown = setInterval(() => {
+                    timeLeft--;
+                    countdownDiv.textContent = timeLeft;
+                    if (timeLeft <= 0) {
+                        clearInterval(countdown);
+                        countdownDiv.textContent = '';
+                        resultDiv.textContent = '';
+                        resultImage.style.display = 'none';
+                        explosionDiv.style.display = 'block';
+                        setTimeout(() => {
+                            explosionDiv.style.display = 'none';
+                            // 爆発後にドアップのじゃこめ画像を表示
+                            zoomImage.style.display = 'block';
+                            setTimeout(() => {
+                                zoomImage.style.display = 'none';
+                            }, 2000); // 2秒間ドアップ表示
+                        }, 1000); // 爆発アニメーションの時間
+                    }
+                }, 1000);
+            } else {
+                resultDiv.textContent = 'じゃこめ';
+                resultImage.src = 'jakome.png'; // じゃこめ用の画像
+                resultImage.style.display = 'block'; // 画像表示
+            }
+        }
+    </script>
+</body>
+</html>
