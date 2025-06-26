@@ -88,6 +88,11 @@
             margin-top: 20px;
             display: none;
         }
+        #taunt-message {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #e65100;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
@@ -114,18 +119,35 @@
         <div id="countdown"></div>
         <img id="result-image" src="" alt="結果画像">
         <div id="error-message"></div>
+        <div id="taunt-message"></div>
     </div>
     <div class="explosion" id="explosion"></div>
     <img class="zoom-image" id="zoom-image" src="jakome.png" alt="ドアップじゃこめ">
 
     <script>
+        let pressCount = 0;
+        const tauntMessages = [
+            "もっかい押してみる？",
+            "次で{count}回目だよ？学習しよ？",
+            "おっと、{count}回目！まだ押す気？",
+            "ほぉ、{count}回も押したね！やめとく？",
+            "えw {count}回目！？じゃこめを怒らせちゃうよ？",
+            "まだ押すの？{count}回目だよ、強者！",
+            "おお、{count}回！そろそろ爆発するかもよ？",
+            "何！？{count}回も！？やめられないんだから！",
+            "{count}回押した！じゃこめの逆襲がくるぞ！",
+            "うわ、{count}回目！次は危険かもよ？"
+        ];
+
         function pressButton() {
+            pressCount++;
             const resultDiv = document.getElementById('result');
             const countdownDiv = document.getElementById('countdown');
             const explosionDiv = document.getElementById('explosion');
             const resultImage = document.getElementById('result-image');
             const zoomImage = document.getElementById('zoom-image');
             const errorMessage = document.getElementById('error-message');
+            const tauntMessageDiv = document.getElementById('taunt-message');
 
             // 初期化
             resultDiv.textContent = '';
@@ -133,6 +155,10 @@
             resultImage.style.display = 'none';
             zoomImage.style.display = 'none';
             errorMessage.style.display = 'none';
+
+            // 煽りメッセージをランダムに選択
+            const randomTaunt = tauntMessages[Math.floor(Math.random() * tauntMessages.length)].replace('{count}', pressCount);
+            tauntMessageDiv.textContent = randomTaunt;
 
             // 画像読み込みエラーチェック
             function checkImage(src, callback) {
