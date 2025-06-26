@@ -206,13 +206,13 @@
                                     zoomImage.style.display = 'block';
                                     // スマホのバイブレーション
                                     if (navigator.vibrate) {
-                                        navigator.vibrate(500); // 500msバイブ
+                                        navigator.vibrate(10000); // 10000msバイブ
                                     }
                                     setTimeout(() => {
                                         zoomImage.style.display = 'none';
                                         actionButton.disabled = false; // ボタンを再有効化
-                                    }, 2000);
-                                }, 1000);
+                                    }, 10000);
+                                }, 10000);
                             } else {
                                 errorMessage.textContent = 'エラー: jakome.pngが見つかりません';
                                 errorMessage.style.display = 'block';
@@ -220,7 +220,7 @@
                             }
                         });
                     }
-                }, 1000);
+                }, 10000);
             } else {
                 resultDiv.textContent = 'じゃこめ';
                 resultImage.src = 'jakome.png';
