@@ -55,9 +55,9 @@
         }
         #result-image {
             margin-top: 20px;
-            max-width: 300px; /* 通常時の画像サイズ */
+            max-width: 300px;
             height: auto;
-            display: none; /* 初期は非表示 */
+            display: none;
             animation: imagePop 0.5s ease-in;
         }
         .explosion {
@@ -78,9 +78,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 画面全体にフィット */
+            object-fit: cover;
             z-index: 1100;
             animation: zoomIn 1s forwards;
+        }
+        #error-message {
+            color: red;
+            font-size: 1.2em;
+            margin-top: 20px;
+            display: none;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.8); }
@@ -107,6 +113,7 @@
         <div id="result"></div>
         <div id="countdown"></div>
         <img id="result-image" src="" alt="結果画像">
+        <div id="error-message"></div>
     </div>
     <div class="explosion" id="explosion"></div>
     <img class="zoom-image" id="zoom-image" src="jakome.png" alt="ドアップじゃこめ">
@@ -118,18 +125,35 @@
             const explosionDiv = document.getElementById('explosion');
             const resultImage = document.getElementById('result-image');
             const zoomImage = document.getElementById('zoom-image');
+            const errorMessage = document.getElementById('error-message');
 
             // 初期化
             resultDiv.textContent = '';
             countdownDiv.textContent = '';
             resultImage.style.display = 'none';
             zoomImage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            // 画像読み込みエラーチェック
+            function checkImage(src, callback) {
+                const img = new Image();
+                img.src = src;
+                img.onload = () => callback(true);
+                img.onerror = () => callback(false);
+            }
 
             // 10分の1の確率で特別なメッセージ
             if (Math.random() < 0.1) {
                 resultDiv.textContent = '衝撃にそなえろ！！！！';
-                resultImage.src = 'shock.png'; // 衝撃用の画像
-                resultImage.style.display = 'block'; // 画像表示
+                resultImage.src = 'shock.png';
+                checkImage('shock.png', (loaded) => {
+                    if (loaded) {
+                        resultImage.style.display = 'block';
+                    } else {
+                        errorMessage.textContent = 'エラー: shock.pngが見つかりません';
+                        errorMessage.style.display = 'block';
+                    }
+                });
                 let timeLeft = 10;
                 countdownDiv.textContent = timeLeft;
 
@@ -142,20 +166,33 @@
                         resultDiv.textContent = '';
                         resultImage.style.display = 'none';
                         explosionDiv.style.display = 'block';
-                        setTimeout(() => {
-                            explosionDiv.style.display = 'none';
-                            // 爆発後にドアップのじゃこめ画像を表示
-                            zoomImage.style.display = 'block';
-                            setTimeout(() => {
-                                zoomImage.style.display = 'none';
-                            }, 2000); // 2秒間ドアップ表示
-                        }, 1000); // 爆発アニメーションの時間
+                        checkImage('jakome.png', (loaded) => {
+                            if (loaded) {
+                                setTimeout(() => {
+                                    explosionDiv.style.display = 'none';
+                                    zoomImage.style.display = 'block';
+                                    setTimeout(() => {
+                                        zoomImage.style.display = 'none';
+                                    }, 2000);
+                                }, 1000);
+                            } else {
+                                errorMessage.textContent = 'エラー: jakome.pngが見つかりません';
+                                errorMessage.style.display = 'block';
+                            }
+                        });
                     }
                 }, 1000);
             } else {
                 resultDiv.textContent = 'じゃこめ';
-                resultImage.src = 'jakome.png'; // じゃこめ用の画像
-                resultImage.style.display = 'block'; // 画像表示
+                resultImage.src = 'jakome.png';
+                checkImage('jakome.png', (loaded) => {
+                    if (loaded) {
+                        resultImage.style.display = 'block';
+                    } else {
+                        errorMessage.textContent = 'エラー: jakome.pngが見つかりません';
+                        errorMessage.style.display = 'block';
+                    }
+                });
             }
         }
     </script>
