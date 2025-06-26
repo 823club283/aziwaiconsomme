@@ -104,7 +104,7 @@
         }
         @keyframes explode {
             from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; scale(2); }
+            to { opacity: 0; transform: scale(2); }
         }
         @keyframes imagePop {
             from { transform: scale(0); opacity: 0; }
@@ -133,14 +133,14 @@
         let pressCount = 0;
         const tauntMessages = [
             "もっかい押してみる？",
-            "{count}回目だよ？学習しよ？",
+            "次で{count}回目だよ？学習しよ？",
             "おっと、{count}回目！まだ押す気？",
-            "ほぉ、{count}回も押したね！もうやめとく？",
-            "えw {count}回目！？怒らせちゃった？",
-            "まだ押すの？{count}回目だよ、ざこざこ！",
+            "ほぉ、{count}回も押したね！やめとく？",
+            "えw {count}回目！？じゃこめを怒らせちゃうよ？",
+            "まだ押すの？{count}回目だよ、強者！",
             "おお、{count}回！そろそろ爆発するかもよ？",
             "何！？{count}回も！？やめられないんだから！",
-            "{count}回押した！ついてないね～",
+            "{count}回押した！じゃこめの逆襲がくるぞ！",
             "うわ、{count}回目！次は危険かもよ？"
         ];
 
@@ -208,7 +208,10 @@
                                     setTimeout(() => {
                                         zoomImage.style.display = 'none';
                                         actionButton.disabled = false; // ボタンを再有効化
-                                    }, 2000);
+                                    millioner
+
+System: 化
+                                    }, 5000); // ドアップ画像の表示時間（5秒）に合わせて変更
                                 }, 1000);
                             } else {
                                 errorMessage.textContent = 'エラー: jakome.pngが見つかりません';
