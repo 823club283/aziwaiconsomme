@@ -43,6 +43,11 @@
         .button:hover {
             transform: scale(1.1);
         }
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
         #result {
             margin-top: 20px;
             font-size: 2em;
@@ -114,7 +119,7 @@
 <body>
     <div class="container">
         <h1>味歪こんそめ公式サイト</h1>
-        <button class="button" onclick="pressButton()">絶対に押すな！</button>
+        <button class="button" id="action-button" onclick="pressButton()">絶対に押すな！</button>
         <div id="result"></div>
         <div id="countdown"></div>
         <img id="result-image" src="" alt="結果画像">
@@ -132,10 +137,10 @@
             "おっと、{count}回目！まだ押す気？",
             "ほぉ、{count}回も押したね！やめとく？",
             "えw {count}回目！？怒らせちゃった？",
-            "まだ押すの？{count}回目だよ、よわむし！",
+            "まだ押すの？{count}回目だよ、よわむし！！",
             "おお、{count}回！そろそろ爆発するかもよ？",
             "何！？{count}回も！？やめられないんだから！",
-            "{count}回押した！じゃこじゃこ",
+            "{count}回押した！じゃこじゃこ！",
             "うわ、{count}回目！次は危険かもよ？"
         ];
 
@@ -148,6 +153,7 @@
             const zoomImage = document.getElementById('zoom-image');
             const errorMessage = document.getElementById('error-message');
             const tauntMessageDiv = document.getElementById('taunt-message');
+            const actionButton = document.getElementById('action-button');
 
             // 初期化
             resultDiv.textContent = '';
@@ -172,6 +178,7 @@
             if (Math.random() < 0.1) {
                 resultDiv.textContent = '衝撃にそなえろ！！！！';
                 resultImage.src = 'shock.png';
+                actionButton.disabled = true; // ボタンを無効化
                 checkImage('shock.png', (loaded) => {
                     if (loaded) {
                         resultImage.style.display = 'block';
@@ -197,13 +204,19 @@
                                 setTimeout(() => {
                                     explosionDiv.style.display = 'none';
                                     zoomImage.style.display = 'block';
+                                    // スマホのバイブレーション
+                                    if (navigator.vibrate) {
+                                        navigator.vibrate(500); // 500msバイブ
+                                    }
                                     setTimeout(() => {
                                         zoomImage.style.display = 'none';
+                                        actionButton.disabled = false; // ボタンを再有効化
                                     }, 2000);
                                 }, 1000);
                             } else {
                                 errorMessage.textContent = 'エラー: jakome.pngが見つかりません';
                                 errorMessage.style.display = 'block';
+                                actionButton.disabled = false; // エラー時もボタンを再有効化
                             }
                         });
                     }
