@@ -104,7 +104,7 @@
         }
         @keyframes explode {
             from { opacity: 1; transform: scale(1); }
-            to { opacity: 0; transform: scale(2); }
+            to { opacity: 0; scale(2); }
         }
         @keyframes imagePop {
             from { transform: scale(0); opacity: 0; }
@@ -133,14 +133,14 @@
         let pressCount = 0;
         const tauntMessages = [
             "もっかい押してみる？",
-            "次で{count}回目だよ？学習しよ？",
+            "{count}回目だよ？学習しよ？",
             "おっと、{count}回目！まだ押す気？",
-            "ほぉ、{count}回も押したね！やめとく？",
+            "ほぉ、{count}回も押したね！もうやめとく？",
             "えw {count}回目！？怒らせちゃった？",
-            "まだ押すの？{count}回目だよ、よわむし！！",
+            "まだ押すの？{count}回目だよ、ざこざこ！",
             "おお、{count}回！そろそろ爆発するかもよ？",
             "何！？{count}回も！？やめられないんだから！",
-            "{count}回押した！じゃこじゃこ！",
+            "{count}回押した！ついてないね～",
             "うわ、{count}回目！次は危険かもよ？"
         ];
 
@@ -161,10 +161,7 @@
             resultImage.style.display = 'none';
             zoomImage.style.display = 'none';
             errorMessage.style.display = 'none';
-
-            // 煽りメッセージをランダムに選択
-            const randomTaunt = tauntMessages[Math.floor(Math.random() * tauntMessages.length)].replace('{count}', pressCount);
-            tauntMessageDiv.textContent = randomTaunt;
+            tauntMessageDiv.textContent = '';
 
             // 画像読み込みエラーチェック
             function checkImage(src, callback) {
@@ -204,15 +201,15 @@
                                 setTimeout(() => {
                                     explosionDiv.style.display = 'none';
                                     zoomImage.style.display = 'block';
-                                    // スマホのバイブレーション
+                                    // スマホのバイブレーション（5秒）
                                     if (navigator.vibrate) {
-                                        navigator.vibrate(10000); // 10000msバイブ
+                                        navigator.vibrate(5000); // 5000msバイブ
                                     }
                                     setTimeout(() => {
                                         zoomImage.style.display = 'none';
                                         actionButton.disabled = false; // ボタンを再有効化
-                                    }, 10000);
-                                }, 10000);
+                                    }, 2000);
+                                }, 1000);
                             } else {
                                 errorMessage.textContent = 'エラー: jakome.pngが見つかりません';
                                 errorMessage.style.display = 'block';
@@ -220,10 +217,13 @@
                             }
                         });
                     }
-                }, 10000);
+                }, 1000);
             } else {
                 resultDiv.textContent = 'じゃこめ';
                 resultImage.src = 'jakome.png';
+                // 通常時に煽りメッセージを表示
+                const randomTaunt = tauntMessages[Math.floor(Math.random() * tauntMessages.length)].replace('{count}', pressCount);
+                tauntMessageDiv.textContent = randomTaunt;
                 checkImage('jakome.png', (loaded) => {
                     if (loaded) {
                         resultImage.style.display = 'block';
